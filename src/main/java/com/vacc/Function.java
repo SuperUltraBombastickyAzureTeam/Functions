@@ -1,4 +1,4 @@
-package org.example.functions;
+package com.vacc;
 
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class HttpTriggerFunction {
+public class Function {
     /**
      * This function listens at endpoint "/api/HttpExample". Two ways to invoke it using "curl" command in bash:
      * 1. curl -d "HTTP Body" {your host}/api/HttpExample
