@@ -1,4 +1,4 @@
-package com.vacc;
+package com.vacc.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

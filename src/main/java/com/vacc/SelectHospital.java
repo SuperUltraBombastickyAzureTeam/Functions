@@ -5,6 +5,8 @@ import java.util.*;
 import com.google.gson.Gson;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
+import com.vacc.model.HospitalLocation;
+import com.vacc.model.HospitalRow;
 
 /**
  * Azure Functions with HTTP Trigger.

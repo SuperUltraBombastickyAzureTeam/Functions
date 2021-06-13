@@ -1,4 +1,4 @@
-package com.vacc;
+package com.vacc.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

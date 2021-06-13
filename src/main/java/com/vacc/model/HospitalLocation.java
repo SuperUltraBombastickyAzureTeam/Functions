@@ -1,4 +1,4 @@
-package com.vacc;
+package com.vacc.model;
 
 import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.StorageException;

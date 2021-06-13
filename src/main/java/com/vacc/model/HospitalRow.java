@@ -1,4 +1,4 @@
-package com.vacc;
+package com.vacc.model;
 
 public class HospitalRow {
     private final String code;
