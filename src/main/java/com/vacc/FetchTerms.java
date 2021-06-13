@@ -18,7 +18,7 @@ public class FetchTerms {
      */
     @FunctionName("FetchTerms")
     public HttpResponseMessage run(
-            @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(name = "req", methods = {HttpMethod.GET}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
             @TableInput(name = "terms", tableName = "TimeSlots", partitionKey = "{hospital}", filter = "RowKey gt '{from}'", connection = "AzureWebJobsStorage") Term[] terms,
             final ExecutionContext context) {
         if (terms.length == 0) {
