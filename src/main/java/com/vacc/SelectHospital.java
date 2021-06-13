@@ -18,13 +18,17 @@ public class SelectHospital {
     @FunctionName("SelectHospital")
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.GET, HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-            @TableInput(name = "hospitals", tableName = "HospitalsList", connection = "AzureWebJobsStorage") HospitalLocation[] hospitals,
+            @TableInput(name = "hospitals", tableName = "HospitalsList",connection = "AzureWebJobsStorage") HospitalLocation[] hospitals,
             final ExecutionContext context) {
         context.getLogger().info("Java HTTP trigger processed a request.");
+        Map<String, List<HospitalRow>> map = new HashMap<>();
         for (HospitalLocation hospital : hospitals) {
-            context.getLogger().info(hospital.toString());
+            if(!map.containsKey(hospital.getPartitionKey())) {
+                map.put(hospital.getPartitionKey(), new ArrayList<>());
+            }
+            map.get(hospital.getPartitionKey()).add(new HospitalRow(hospital.getRowKey(), hospital.getInfo()));
         }
-        String body = new Gson().toJson(hospitals);
+        String body = new Gson().toJson(map);
         return request.createResponseBuilder(HttpStatus.OK).body(body).build();
     }
 }
