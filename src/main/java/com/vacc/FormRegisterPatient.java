@@ -31,7 +31,7 @@ public class FormRegisterPatient {
         if (body == null || patient == null) {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
         } else {
-            try(PreparedStatement statement = SQLHelper.getConnection().prepareStatement("INSERT INTO patient (GUID, first_name, surname, birth_date, residence, phone_number, mail, comment, vaccination_dates, insurance_number, hospital_GUID) values (?,?,?,?,?,?,?,?,?,?,?);")) {
+            try(PreparedStatement statement = SQLHelper.getConnection().prepareStatement("INSERT INTO patients (GUID, first_name, surname, birth_date, residence, phone_number, mail, comment, vaccination_dates, insurance_number, hospital_GUID) values (?,?,?,?,?,?,?,?,?,?,?);")) {
                 statement.setString(1, patient.getGuid());
                 statement.setString(2, patient.getFirstName());
                 //ENCRYPT?
