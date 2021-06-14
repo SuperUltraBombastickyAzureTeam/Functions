@@ -25,7 +25,7 @@ public class FormRegisterPatient {
     @FunctionName("FormRegisterPatient")
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-            @TableInput(name= "tuple", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}") InsuranceGuidTuple tuple,
+            @TableInput(name= "tuple", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") InsuranceGuidTuple tuple,
             final ExecutionContext context) {
         context.getLogger().info("Java HTTP trigger processed a request.");
         String body = request.getBody().orElse(null);
