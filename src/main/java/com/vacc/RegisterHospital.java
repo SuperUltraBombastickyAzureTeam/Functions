@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import com.vacc.model.Hospital;
+import com.vacc.model.InsuranceGuidTuple;
 import com.vacc.util.SQLHelper;
 
 /**
