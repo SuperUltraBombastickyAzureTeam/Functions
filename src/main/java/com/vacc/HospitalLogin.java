@@ -47,9 +47,6 @@ public class HospitalLogin {
                     while (rs.next()) {
                         passwrd = rs.getString("passwrd");
                     }
-                    context.getLogger().info(parsed[0]);
-                    context.getLogger().info(parsed[1]);
-                    context.getLogger().info(passwrd);
                     if (passwrd.equals(parsed[1])) {
                         context.getLogger().info("DONE");
                         return request.createResponseBuilder(HttpStatus.OK).body("Logged-in successfully").build();
