@@ -1,6 +1,7 @@
 package com.vacc.model;
 
 public class Patient {
+
     private final String guid;
     private final String firstName;
     private final String surname;
@@ -10,8 +11,11 @@ public class Patient {
     private final String mail;
     private final String comment;
     private final long insuranceNumber;
+    private final String vaccinationDates;
+    private String hospitalGUID;
+    private final String hospitalName;
 
-    public Patient(String guid, String firstName, String surname, String birthDate, String residence, String phoneNumber, String mail, String comment, long insuranceNumber) {
+    public Patient(String guid, String firstName, String surname, String birthDate, String residence, String phoneNumber, String mail, String comment, long insuranceNumber, String vaccinationDates, String hospitalGUID, String hospitalName) {
         this.guid = guid;
         this.firstName = firstName;
         this.surname = surname;
@@ -21,6 +25,9 @@ public class Patient {
         this.mail = mail;
         this.comment = comment;
         this.insuranceNumber = insuranceNumber;
+        this.vaccinationDates = vaccinationDates;
+        this.hospitalGUID = hospitalGUID;
+        this.hospitalName = hospitalName;
     }
 
     public String getGuid() {
@@ -57,5 +64,21 @@ public class Patient {
 
     public long getInsuranceNumber() {
         return insuranceNumber;
+    }
+
+    public String getVaccinationDates() {
+        return vaccinationDates;
+    }
+
+    public String getHospitalGUID() {
+        return hospitalGUID;
+    }
+
+    public void setHospitalGUID(String hospitalGUID) {
+        this.hospitalGUID = hospitalGUID;
+    }
+
+    public String getHospitalName() {
+        return hospitalName;
     }
 }

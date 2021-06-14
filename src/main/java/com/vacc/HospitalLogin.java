@@ -37,9 +37,6 @@ public class HospitalLogin {
         } else {
             try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT passwrd FROM hospitals WHERE username = ?;")) {
                 Hospital hosp = new Gson().fromJson(request.getBody().orElse(null), Hospital.class);
-                context.getLogger().info(hosp.toString());
-                context.getLogger().info(hosp.getUsername());
-                context.getLogger().info(hosp.getPasswrd());
                 if (hosp.getPasswrd().isEmpty() || hosp.getUsername().isEmpty()) {
                     return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Wrong username or password").build();
                 }
