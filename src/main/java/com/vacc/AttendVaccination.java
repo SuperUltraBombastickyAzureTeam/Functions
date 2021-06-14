@@ -23,8 +23,8 @@ import com.vacc.util.SQLHelper;
 public class AttendVaccination {
 
     /**
-     * This function listens at endpoint "/api/RemoveAttend". Two ways to invoke it using "curl" command in bash:
-     * 1. curl -d "HTTP Body" {your host}/api/RemoveAttend
+     * This function listens at endpoint "/api/AttendVaccination". Two ways to invoke it using "curl" command in bash:
+     * 1. curl -d "HTTP Body" {your host}/api/AttendVaccination
      * 2. curl {your host}/api/RemoveAttend?name=HTTP%20Query
      */
     @FunctionName("AttendVaccination")
