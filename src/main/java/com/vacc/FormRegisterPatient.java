@@ -25,7 +25,8 @@ public class FormRegisterPatient {
     @FunctionName("FormRegisterPatient")
     public HttpResponseMessage run(
             @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-            @TableInput(name= "tuple", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") InsuranceGuidTuple tuple,
+            @TableInput(name = "tuple", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") InsuranceGuidTuple tuple,
+            @TableOutput(name = "insurances", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") OutputBinding<InsuranceGuidTuple> insurancesOutput,
             final ExecutionContext context) {
         context.getLogger().info("Java HTTP trigger processed a request.");
         String body = request.getBody().orElse(null);
@@ -72,6 +73,7 @@ public class FormRegisterPatient {
                 statement.setLong(10, patient.getInsuranceNumber());
                 statement.setString(11, null);
                 statement.executeUpdate();
+                insurancesOutput.setValue(new InsuranceGuidTuple("unique", String.valueOf(patient.getInsuranceNumber()), patient.getGuid()));
                 context.getLogger().info("DONE");
             } catch (SQLException e) {
                 context.getLogger().severe(e.getMessage());
