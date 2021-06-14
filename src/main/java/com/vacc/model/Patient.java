@@ -1,11 +1,13 @@
 package com.vacc.model;
 
+import java.sql.Date;
+
 public class Patient {
 
     private final String guid;
     private final String firstName;
     private final String surname;
-    private final String birthDate;
+    private final Date birthDate;
     private final String residence;
     private final String phoneNumber;
     private final String mail;
@@ -13,9 +15,9 @@ public class Patient {
     private final long insuranceNumber;
     private final String vaccinationDates;
     private String hospitalGUID;
-    private final String hospitalName;
+    private String hospitalName = "";
 
-    public Patient(String guid, String firstName, String surname, String birthDate, String residence, String phoneNumber, String mail, String comment, long insuranceNumber, String vaccinationDates, String hospitalGUID, String hospitalName) {
+    public Patient(String guid, String firstName, String surname, Date birthDate, String residence, String phoneNumber, String mail, String comment, long insuranceNumber, String vaccinationDates, String hospitalGUID, String hospitalName) {
         this.guid = guid;
         this.firstName = firstName;
         this.surname = surname;
@@ -30,6 +32,20 @@ public class Patient {
         this.hospitalName = hospitalName;
     }
 
+    public Patient(String guid, String firstName, String surname, Date birthDate, String residence, String phoneNumber, String mail, String comment, long insuranceNumber, String vaccinationDates, String hospitalGUID) {
+        this.guid = guid;
+        this.firstName = firstName;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.residence = residence;
+        this.phoneNumber = phoneNumber;
+        this.mail = mail;
+        this.comment = comment;
+        this.insuranceNumber = insuranceNumber;
+        this.vaccinationDates = vaccinationDates;
+        this.hospitalGUID = hospitalGUID;
+    }
+
     public String getGuid() {
         return guid;
     }
@@ -42,7 +58,7 @@ public class Patient {
         return surname;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
