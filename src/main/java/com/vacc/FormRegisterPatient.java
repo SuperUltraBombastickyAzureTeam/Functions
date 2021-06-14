@@ -64,7 +64,7 @@ public class FormRegisterPatient {
                 statement.setString(2, patient.getFirstName());
                 //ENCRYPT?
                 statement.setString(3, patient.getSurname());
-                statement.setDate(4, Date.valueOf(patient.getBirthDate()));
+                statement.setDate(4, patient.getBirthDate());
                 statement.setString(5, patient.getResidence());
                 statement.setString(6, patient.getPhoneNumber());
                 statement.setString(7, patient.getMail());
