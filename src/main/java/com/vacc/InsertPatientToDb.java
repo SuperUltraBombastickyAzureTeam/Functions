@@ -26,11 +26,15 @@ public class InsertPatientToDb {
     @FunctionName("InsertPatientToDb")
     public void run(
             @ServiceBusQueueTrigger(name = "request", queueName = "service-bus-queue", connection = "queueconnection", access = AccessRights.LISTEN) String request,
+            @TableInput(name = "tuple", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") InsuranceGuidTuple tuple,
             @TableOutput(name = "insurances", tableName = "UniqueInsurances", partitionKey = "unique", rowKey = "{insuranceNumber}", connection = "AzureWebJobsStorage") OutputBinding<InsuranceGuidTuple> insurancesOutput,
             final ExecutionContext context) {
         context.getLogger().info("Java Queue trigger processed a request.");
         context.getLogger().info("Patient: " + request);
         FormPatient patient = new Gson().fromJson(request, FormPatient.class);
+        if (tuple != null) {
+            return;
+        }
         if (patient == null) {
             throw new RuntimeException("Patient could not be parsed.");
         } else {
