@@ -14,6 +14,7 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.vacc.model.AttendVaccinationRequest;
 import com.vacc.model.Patient;
 import com.vacc.util.SQLHelper;
 
@@ -29,39 +30,52 @@ public class AttendVaccination {
      */
     @FunctionName("AttendVaccination")
     public HttpResponseMessage run(
-            @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<AttendVaccinationRequest>> request,
             final ExecutionContext context) {
         context.getLogger().info("Java HTTP trigger processed a request.");
-
-        Patient patient;
-        try {
-            patient = new Gson().fromJson(request.getBody().orElse(null), Patient.class);
-            if (patient.getGuid().isEmpty()) {
-                throw new RuntimeException("Json is not correct");
-            }
-        } catch (Exception e) {
-            context.getLogger().severe(e.getMessage());
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error while parsing json").build();
+        if (request.getBody().isEmpty()) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Incorrect body").build();
+        }
+        AttendVaccinationRequest vaccRequest = request.getBody().get();
+        if (vaccRequest.getGuid().isEmpty()) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("patient guid is missing").build();
         }
 
+        String hospGUID = null;
         try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT GUID FROM hospitals WHERE username = ?;")) {
-            statement.setString(1, patient.getHospitalName());
+            statement.setString(1, vaccRequest.getHospitalName());
             ResultSet rs = statement.executeQuery();
-            String GUID = null;
             while (rs.next()) {
-                GUID = rs.getString("GUID");
+                hospGUID = rs.getString("GUID");
             }
-            patient.setHospitalGUID(GUID);
+        } catch (SQLException e) {
+            context.getLogger().severe(e.getMessage());
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("SQL ERROR").build();
+        }
+        String vaccinationDates = null;
+        try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT vaccinationDates FROM patients WHERE GUID = ?;")) {
+            statement.setString(1, vaccRequest.getGuid());
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                vaccinationDates = rs.getString("vaccinationDates");
+            }
         } catch (SQLException e) {
             context.getLogger().severe(e.getMessage());
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("SQL ERROR").build();
         }
 
-        try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("UPDATE patients SET vaccination_dates = ?, hospital_GUID = ? WHERE GUID = ?;")) {
+        if (hospGUID == null) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Hospital not found").build();
+        }
 
-            statement.setString(1, patient.getVaccinationDates());
-            statement.setString(2, patient.getHospitalGUID());
-            statement.setString(3, patient.getGuid());
+        try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("UPDATE patients SET vaccination_dates = ?, hospital_GUID = ? WHERE GUID = ?;")) {
+            if (vaccinationDates == null || vaccinationDates.isEmpty()) {
+                statement.setString(1, vaccRequest.getVaccinationDate());
+            } else {
+                statement.setString(1, vaccinationDates + ";" + vaccRequest.getVaccinationDate());
+            }
+            statement.setString(2, hospGUID);
+            statement.setString(3, vaccRequest.getGuid());
             statement.executeUpdate();
         } catch (SQLException e) {
             context.getLogger().severe(e.getMessage());
