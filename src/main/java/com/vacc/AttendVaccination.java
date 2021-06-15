@@ -53,11 +53,11 @@ public class AttendVaccination {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("SQL ERROR").build();
         }
         String vaccinationDates = null;
-        try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT vaccinationDates FROM patients WHERE GUID = ?;")) {
+        try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT vaccination_dates FROM patients WHERE GUID = ?;")) {
             statement.setString(1, vaccRequest.getGuid());
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                vaccinationDates = rs.getString("vaccinationDates");
+                vaccinationDates = rs.getString("vaccination_dates");
             }
         } catch (SQLException e) {
             context.getLogger().severe(e.getMessage());

@@ -30,6 +30,7 @@ public class FormRegisterPatient {
         String body = request.getBody().orElse(null);
         FormPatient patient = new Gson().fromJson(body, FormPatient.class);
         if (tuple != null) {
+            context.getLogger().info("EXECUTED!!!");
             try (PreparedStatement statement = SQLHelper.getConnection().prepareStatement("SELECT username, vaccination_dates FROM patients left join hospitals on (patients.hospital_GUID = hospitals.GUID) WHERE patients.GUID=?")) {
                 statement.setString(1, tuple.getGuid());
                 ResultSet set = statement.executeQuery();
